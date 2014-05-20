@@ -79,7 +79,6 @@
 //- (void)setSenderViewForAnimation:(UIView*)senderView;
 
 // Dismiss the photo browser
-- (void)dismissPhotoBrowserAnimated:(BOOL)animated;
-
+- (void)doneButtonPressed:(id)sender;
 
 @end
