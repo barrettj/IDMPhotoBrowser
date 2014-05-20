@@ -88,7 +88,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 - (IDMZoomingScrollView *)pageDisplayingPhoto:(id<IDMPhoto>)photo;
 - (IDMZoomingScrollView *)dequeueRecycledPage;
 - (void)configurePage:(IDMZoomingScrollView *)page forIndex:(NSUInteger)index;
-- (void)didStartViewingPageAtIndex:(NSUInteger)index;
+- (void)didStartViewingPageAtIndex:(NSUInteger)index oldIndex:(NSUInteger)oldIndex;
 
 // Frames
 - (CGRect)frameForPagingScrollView;
@@ -290,7 +290,21 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     if ([(UIPanGestureRecognizer*)sender state] == UIGestureRecognizerStateEnded) {
         if(scrollView.center.y > viewHalfHeight+40 || scrollView.center.y < viewHalfHeight-40) // Automatic Dismiss View
         {
-            if (_senderViewForAnimation && _currentPageIndex == _initalPageIndex) {
+            BOOL destinationIndexFound = NO;
+            if ([self.delegate respondsToSelector:@selector(photoBrowser:destinationViewForPhotoAtIndex:)])
+            {
+                UIView *destinationView = [self.delegate photoBrowser:self destinationViewForPhotoAtIndex:_currentPageIndex];
+                
+                _resizableImageViewFrame = [destinationView.superview convertRect:destinationView.frame toView:nil];
+                _senderViewForAnimation = destinationView;
+                
+                destinationIndexFound = YES;
+            }
+            
+            if (_senderViewForAnimation
+                && (_currentPageIndex == _initalPageIndex || destinationIndexFound))
+            {
+                IDMZoomingScrollView *scrollView = [self pageDisplayedAtIndex:_currentPageIndex];
                 [self performCloseAnimationWithScrollView:scrollView];
                 return;
             }
@@ -752,7 +766,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 	
 	// Adjust contentOffset to preserve page location based on values collected prior to location
 	_pagingScrollView.contentOffset = [self contentOffsetForPageAtIndex:indexPriorToLayout];
-	[self didStartViewingPageAtIndex:_currentPageIndex]; // initial
+	[self didStartViewingPageAtIndex:_currentPageIndex oldIndex:indexPriorToLayout]; // initial
     
 	// Reset
 	_currentPageIndex = indexPriorToLayout;
@@ -1068,7 +1082,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 }
 
 // Handle page changes
-- (void)didStartViewingPageAtIndex:(NSUInteger)index {
+- (void)didStartViewingPageAtIndex:(NSUInteger)index oldIndex:(NSUInteger)oldIndex {
     // Load adjacent images if needed and the photo is already
     // loaded. Also called after photo has been loaded in background
     id <IDMPhoto> currentPhoto = [self photoAtIndex:index];
@@ -1076,8 +1090,8 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         // photo loaded so load ajacent now
         [self loadAdjacentPhotosIfNecessary:currentPhoto];
     }
-    if ([_delegate respondsToSelector:@selector(photoBrowser:didShowPhotoAtIndex:)]) {
-        [_delegate photoBrowser:self didShowPhotoAtIndex:index];
+    if ([_delegate respondsToSelector:@selector(photoBrowser:didShowPhotoAtIndex:oldIndex:)]) {
+        [_delegate photoBrowser:self didShowPhotoAtIndex:index oldIndex:oldIndex];
     }
 }
 
@@ -1163,7 +1177,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     NSUInteger previousCurrentPage = _currentPageIndex;
     _currentPageIndex = index;
     if (_currentPageIndex != previousCurrentPage) {
-        [self didStartViewingPageAtIndex:index];
+        [self didStartViewingPageAtIndex:index oldIndex:previousCurrentPage];
         
         if(_arrowButtonsChangePhotosAnimated) [self updateToolbar];
     }
@@ -1295,7 +1309,20 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 #pragma mark - Buttons
 
 - (void)doneButtonPressed:(id)sender {
-    if (_senderViewForAnimation && _currentPageIndex == _initalPageIndex) {
+    BOOL destinationIndexFound = NO;
+    if ([self.delegate respondsToSelector:@selector(photoBrowser:destinationViewForPhotoAtIndex:)])
+    {
+        UIView *destinationView = [self.delegate photoBrowser:self destinationViewForPhotoAtIndex:_currentPageIndex];
+        
+        _resizableImageViewFrame = [destinationView.superview convertRect:destinationView.frame toView:nil];
+        _senderViewForAnimation = destinationView;
+        
+        destinationIndexFound = YES;
+    }
+    
+    if (_senderViewForAnimation
+        && (_currentPageIndex == _initalPageIndex || destinationIndexFound))
+    {
         IDMZoomingScrollView *scrollView = [self pageDisplayedAtIndex:_currentPageIndex];
         [self performCloseAnimationWithScrollView:scrollView];
     }
