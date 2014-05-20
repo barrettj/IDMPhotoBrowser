@@ -78,4 +78,8 @@
 // Change Sender View
 //- (void)setSenderViewForAnimation:(UIView*)senderView;
 
+// Dismiss the photo browser
+- (void)dismissPhotoBrowserAnimated:(BOOL)animated;
+
+
 @end
