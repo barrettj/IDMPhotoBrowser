@@ -660,11 +660,14 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
   
     // Update UI
 	[self hideControlsAfterDelay];
+    [self setControlsHidden:YES animated:NO permanent:NO];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     _viewIsActive = YES;
+    [self setControlsHidden:NO animated:YES permanent:NO];
+
 }
 
 // Release any retained subviews of the main view.
@@ -1255,7 +1258,7 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     }
     
     // Hide/show bars
-    [UIView animateWithDuration:(animated ? 0.1 : 0) animations:^(void) {
+    [UIView animateWithDuration:(animated ? 0.3 : 0) animations:^(void) {
         CGFloat alpha = hidden ? 0 : 1;
         [self.navigationController.navigationBar setAlpha:alpha];
         [_toolbar setAlpha:alpha];
