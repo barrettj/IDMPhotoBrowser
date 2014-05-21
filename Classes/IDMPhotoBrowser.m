@@ -461,6 +461,15 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
     resizableImageView.contentMode = UIViewContentModeScaleAspectFill;
     resizableImageView.backgroundColor = [UIColor clearColor];
     resizableImageView.clipsToBounds = YES;
+    
+    if ([[[[UIApplication sharedApplication] keyWindow] rootViewController] interfaceOrientation] == UIInterfaceOrientationLandscapeLeft) {
+        resizableImageView.transform = CGAffineTransformMakeRotation(-90 * M_PI/180);
+    }
+    if ([[[[UIApplication sharedApplication] keyWindow] rootViewController] interfaceOrientation] == UIInterfaceOrientationLandscapeRight) {
+        resizableImageView.transform = CGAffineTransformMakeRotation(90 * M_PI/180);
+    }
+
+    
     [_applicationWindow addSubview:resizableImageView];
     self.view.hidden = YES;
     
