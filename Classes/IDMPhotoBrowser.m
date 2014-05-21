@@ -419,6 +419,12 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
             if (newWidth > photoSize.width * 2 && newHeight > photoSize.height * 2) {
                 newWidth = photoSize.width * 2;
                 newHeight = photoSize.height * 2;
+                
+                if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
+                    CGFloat temp = newHeight;
+                    newHeight = newWidth;
+                    newWidth = temp;
+                }
             }
         }
         
