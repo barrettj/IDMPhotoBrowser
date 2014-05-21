@@ -403,10 +403,28 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
         [_applicationRootViewController.view setTransform:zoom];*/
         
         fadeView.backgroundColor = self.useWhiteBackgroundColor ? [UIColor whiteColor] : [UIColor blackColor];
-
-        float scaleFactor = (imageFromView ? imageFromView.size.width : screenWidth) / screenWidth;
         
-        resizableImageView.frame = CGRectMake(0, (screenHeight/2)-((imageFromView.size.height / scaleFactor)/2), screenWidth, imageFromView.size.height / scaleFactor);
+        CGFloat hScaleFactor = (imageFromView ? imageFromView.size.width : screenWidth) / screenWidth;
+        CGFloat vScaleFactor = (imageFromView ? imageFromView.size.height : screenHeight) / screenHeight;
+        
+        CGFloat scaleFactor = MAX(hScaleFactor, vScaleFactor);
+
+        CGFloat newWidth = imageFromView.size.width / scaleFactor;
+        CGFloat newHeight = imageFromView.size.height / scaleFactor;
+        
+        // constrain to 2x the size of image (if possible) - small photos are displayed at 2x (so we use that instead of 1x)
+        id<IDMPhoto> firstPhoto = _photos[_initalPageIndex];
+        if ([firstPhoto underlyingImage]) {
+            CGSize photoSize = [firstPhoto underlyingImage].size;
+            if (newWidth > photoSize.width * 2 && newHeight > photoSize.height * 2) {
+                newWidth = photoSize.width * 2;
+                newHeight = photoSize.height * 2;
+            }
+        }
+        
+        CGRect newFrame = CGRectMake((screenWidth - newWidth)/2, (screenHeight - newHeight)/2, newWidth, newHeight);
+        
+         resizableImageView.frame = newFrame;
     } completion:^(BOOL finished) {
         self.view.alpha = 1.0f;
         resizableImageView.backgroundColor = [UIColor colorWithWhite:(_useWhiteBackgroundColor) ? 1 : 0 alpha:1];
