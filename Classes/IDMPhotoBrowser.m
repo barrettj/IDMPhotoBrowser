@@ -75,51 +75,6 @@ NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBund
 @property (nonatomic, strong) UIActionSheet *actionsSheet;
 @property (nonatomic, strong) UIActivityViewController *activityViewController;
 
-// Private Methods
-
-// Layout
-- (void)performLayout;
-
-// Paging
-- (void)tilePages;
-- (BOOL)isDisplayingPageForIndex:(NSUInteger)index;
-- (IDMZoomingScrollView *)pageDisplayedAtIndex:(NSUInteger)index;
-- (IDMZoomingScrollView *)pageDisplayingPhoto:(id<IDMPhoto>)photo;
-- (IDMZoomingScrollView *)dequeueRecycledPage;
-- (void)configurePage:(IDMZoomingScrollView *)page forIndex:(NSUInteger)index;
-- (void)didStartViewingPageAtIndex:(NSUInteger)index oldIndex:(NSUInteger)oldIndex;
-
-// Frames
-- (CGRect)frameForPagingScrollView;
-- (CGRect)frameForPageAtIndex:(NSUInteger)index;
-- (CGSize)contentSizeForPagingScrollView;
-- (CGPoint)contentOffsetForPageAtIndex:(NSUInteger)index;
-- (CGRect)frameForToolbarAtOrientation:(UIInterfaceOrientation)orientation;
-- (CGRect)frameForDoneButtonAtOrientation:(UIInterfaceOrientation)orientation;
-- (CGRect)frameForCaptionView:(IDMCaptionView *)captionView atIndex:(NSUInteger)index;
-
-// Toolbar
-- (void)updateToolbar;
-
-// Navigation
-- (void)jumpToPageAtIndex:(NSUInteger)index;
-- (void)gotoPreviousPage;
-- (void)gotoNextPage;
-
-// Controls
-- (void)cancelControlHiding;
-- (void)hideControlsAfterDelay;
-- (void)setControlsHidden:(BOOL)hidden animated:(BOOL)animated permanent:(BOOL)permanent;
-- (void)toggleControls;
-- (BOOL)areControlsHidden;
-
-// Data
-- (NSUInteger)numberOfPhotos;
-- (id<IDMPhoto>)photoAtIndex:(NSUInteger)index;
-- (UIImage *)imageForPhoto:(id<IDMPhoto>)photo;
-- (void)loadAdjacentPhotosIfNecessary:(id<IDMPhoto>)photo;
-- (void)releaseAllUnderlyingPhotos;
-
 @end
 
 // IDMPhotoBrowser
