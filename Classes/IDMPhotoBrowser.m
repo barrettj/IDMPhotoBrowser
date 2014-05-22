@@ -1312,8 +1312,7 @@ NSString * const IDMPhoto_LOADING_DID_END_NOTIFICATION = @"IDMPhoto_LOADING_DID_
         destinationIndexFound = YES;
     }
     
-    if (_senderViewForAnimation
-        && (_currentPageIndex == _initalPageIndex || destinationIndexFound))
+    if (_senderViewForAnimation && destinationIndexFound)
     {
         IDMZoomingScrollView *scrollView = [self pageDisplayedAtIndex:_currentPageIndex];
         [self performCloseAnimationWithScrollView:scrollView];
