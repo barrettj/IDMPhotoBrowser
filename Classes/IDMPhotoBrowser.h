@@ -84,4 +84,7 @@
 // Dismiss the photo browser
 - (void)doneButtonPressed:(id)sender;
 
+// adds photos at the end of the list, must be photo objects (not URLS)
+- (void)addPhotos:(NSArray*)photos;
+
 @end

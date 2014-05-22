@@ -201,6 +201,11 @@ NSString * const IDMPhoto_LOADING_DID_END_NOTIFICATION = @"IDMPhoto_LOADING_DID_
     [super didReceiveMemoryWarning];
 }
 
+- (void)addPhotos:(NSArray*)photos {
+    [_photos addObjectsFromArray:photos];
+}
+
+
 #pragma mark - Pan Gesture
 
 - (void)panGestureRecognized:(id)sender {
