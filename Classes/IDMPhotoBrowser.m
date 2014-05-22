@@ -15,6 +15,8 @@
 NSLocalizedStringFromTableInBundle((key), nil, [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"IDMPBLocalizations" ofType:@"bundle"]], nil)
 #endif
 
+NSString * const IDMPhoto_LOADING_DID_END_NOTIFICATION = @"IDMPhoto_LOADING_DID_END_NOTIFICATION";
+
 // Private
 @interface IDMPhotoBrowser () {
 	// Data
