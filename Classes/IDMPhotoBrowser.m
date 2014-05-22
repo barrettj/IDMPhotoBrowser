@@ -1190,7 +1190,12 @@ NSString * const IDMPhoto_LOADING_DID_END_NOTIFICATION = @"IDMPhoto_LOADING_DID_
 - (void)updateToolbar {
     // Counter
 	if ([self numberOfPhotos] > 1) {
-		_counterLabel.text = [NSString stringWithFormat:@"%u %@ %lu", _currentPageIndex+1, IDMPhotoBrowserLocalizedStrings(@"of"), (unsigned long)[self numberOfPhotos]];
+        if ([self.delegate respondsToSelector:@selector(photoBrowser:counterLabelTextForPhotoAtIndex:)]) {
+            _counterLabel.text = [self.delegate photoBrowser:self counterLabelTextForPhotoAtIndex:_currentPageIndex];
+        }
+        else {
+            _counterLabel.text = [NSString stringWithFormat:@"%u %@ %lu", _currentPageIndex+1, IDMPhotoBrowserLocalizedStrings(@"of"), (unsigned long)[self numberOfPhotos]];
+        }
 	} else {
 		_counterLabel.text = nil;
 	}

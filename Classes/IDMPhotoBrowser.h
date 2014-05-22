@@ -22,6 +22,8 @@
 - (void)photoBrowser:(IDMPhotoBrowser *)photoBrowser didDismissActionSheetWithButtonIndex:(NSUInteger)buttonIndex photoIndex:(NSUInteger)photoIndex;
 - (IDMCaptionView *)photoBrowser:(IDMPhotoBrowser *)photoBrowser captionViewForPhotoAtIndex:(NSUInteger)index;
 - (UIView *)photoBrowser:(IDMPhotoBrowser *)photoBrowser destinationViewForPhotoAtIndex:(NSUInteger)index;
+- (NSString *)photoBrowser:(IDMPhotoBrowser *)photoBrowser counterLabelTextForPhotoAtIndex:(NSUInteger)index;
+
 @end
 
 // IDMPhotoBrowser
